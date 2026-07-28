@@ -7,6 +7,25 @@ the business — it is her most visible asset and the most expensive one to chan
 
 ---
 
+## 0. Where this stands — 28 July 2026
+
+**Live at https://davidwbritt.github.io/poochparlor/** (noindex + disallow-all robots.txt
+while it is a demo). Dave sent Sheryl the link on 27 July. **Awaiting her response.**
+
+Done: nine pages, brand derived from her van, real Google reviews in, deployed with
+auto-deploy on push to `develop`.
+
+Open decisions, in rough priority order:
+
+1. **Re-lead on nervous dogs, not convenience.** See §7 — this is the biggest content
+   change on the table and it is not yet made. The site still leads on "comes to your
+   door", which every competitor also sells.
+2. **Put her name on the site.** See §1a. Sheryl appears nowhere.
+3. **Spa or Salon?** See §1. Currently Spa everywhere; Google and Facebook say Salon.
+4. **Real prices and photographs** — still placeholders, still the blockers for launch.
+5. **Wire the form to something.** It currently sends nothing. See §11a for the SMS
+   argument, which is also the fix for her only negative review.
+
 ## 1. The name
 
 Three different names are currently in use:
@@ -14,13 +33,24 @@ Three different names are currently in use:
 | Where | Name |
 |---|---|
 | The van | The Pooch Parlor — **Mobile Pet Spa** |
+| Google Business Profile | The Pooch Parlor Mobile Pet **Salon** |
 | Facebook | The Pooch Parlor Mobile Pet **Salon** |
 | Wix site | The Pooch Parlor |
 
-**This prototype standardises on "The Pooch Parlor Mobile Pet Spa"**, matching the van.
-"Spa" also does more positioning work than "salon". Worth confirming with her, and
-worth fixing the Facebook page name either way — three names across three surfaces
-costs her search visibility and looks careless.
+**The prototype standardises on "Mobile Pet Spa"**, matching the van, and the whole site
+currently says Spa. Be aware this is a closer call than it first looked: Google and
+Facebook both say *Salon*, so it is 2-to-1 against. The argument for Spa is that Google's
+naming guidance keys off real-world signage, and her signage is the van.
+
+**Still undecided. Pick one and make all four match** — the specific choice matters far
+less than the inconsistency, which costs her search visibility and looks careless.
+
+## 1a. Her name
+
+**Sheryl.** Four separate reviewers use it unprompted. She is not named anywhere on the
+prototype, which is a missed opportunity for a business whose entire pitch is *one
+person, one dog at a time*. Confirm the spelling and that she is happy to be named
+before putting it on the About page.
 
 ## 2. Tagline
 
@@ -143,9 +173,11 @@ name by accident.
       (4.7 from 14 reviews), with names as the reviewer left them. Longer ones are
       shortened with an ellipsis; no wording was changed. Rating and count are shown
       on the reviews page and will need updating by hand as they change.
-- [ ] **Confirm the service area.** The town and ZIP list is an educated guess based on
-      Wake Forest. Her actual route, and any travel charge beyond a set distance, must
-      replace it. ZIPs live in one place: `data-zips` on the ZIP-check form.
+- [ ] **Confirm the service area.** Partly answered: she travels widely across the
+      Triangle and is down in Cary a couple of days most weeks, so the page now lists a
+      core route plus wider towns. The town names are right in outline; the ZIPs are
+      filled in around them and still need her confirmation, as does any travel charge
+      beyond a set distance. ZIPs live in one place: `data-zips` on the ZIP-check form.
 - [x] **Google Business Profile — exists**, 4.7 from 14 reviews. Still worth pushing
       review count up: 4.7 across 40 outranks 4.7 across 14 in local search.
 
@@ -206,9 +238,74 @@ Mapping:
 Also worth setting up at handover: Google Business Profile, `LocalBusiness` schema
 (not yet added), a real domain, and analytics if she wants it.
 
+## 11a. Recommended WordPress stack
+
+Target domain: **poochparlorspa.com**. Governing principle: **plugin count is the
+maintenance burden**. Aim for six or fewer with auto-updates on. A lean site she never
+has to think about beats a capable one that breaks in eight months.
+
+| Need | Pick | Cost |
+|---|---|---|
+| Forms | **Fluent Forms** free — conditional logic and entry storage in the free tier, unlike WPForms Lite | $0 |
+| Email delivery | **FluentSMTP** + Brevo free (300/day) | $0 |
+| SEO + LocalBusiness schema | **Rank Math** free (Yoast charges for Local) | $0 |
+| Image compression | **EWWW** — local, no monthly cap | $0 |
+| Backups | **UpdraftPlus** free → her Google Drive | $0 |
+| Analytics | **Independent Analytics** — in dashboard, no cookie banner | $0 |
+| Uptime | UptimeRobot | $0 |
+
+Realistic all-in: **~$65–155/yr**, almost entirely domain and hosting.
+
+### Booking
+
+**Do not default to a WordPress booking plugin.** She is in a van all day; managing
+availability through wp-admin on a phone means she won't, and a stale calendar is worse
+than none.
+
+- **Preferred: Square Appointments** — free for a single staff member, real mobile app,
+  buffer times (how you model drive time), automatic client reminders, and it owns the
+  SMS compliance burden for customer messaging.
+- **If it must live in WordPress:** FluentBooking or Simply Schedule Appointments, both
+  with usable free tiers. Avoid Amelia/Bookly — thin free tiers, costs escalate via
+  add-ons.
+- **Or keep the request form.** Route-based businesses need to batch geographically, and
+  open self-service booking lets someone take 9:00 in Louisburg and 9:45 in Creedmoor.
+  Ask how she actually schedules before assuming a calendar is an upgrade.
+
+### SMS to her — the fix for her one bad review
+
+See §7: her only negative review is a response-time complaint, which makes this more
+than a nicety.
+
+- **Free first:** carrier email-to-SMS gateway. Point the form notification at
+  `<number>@vzwpix.com` / `@txt.att.net` / `@tmomail.net` depending on her carrier. Zero
+  cost, zero compliance, works today. Carrier-dependent, but this is a notification *to
+  her*, so the reliability bar is low.
+- **If that proves flaky:** Twilio, ~$1.15/mo plus well under a cent per message. The
+  gotcha is mandatory US A2P 10DLC brand/campaign registration — sole proprietor
+  registration is the cheap path.
+- **SMS to her customers** is a different animal: TCPA consent, 10DLC, real legal
+  exposure. Don't hand-roll it. Another argument for Square.
+
+### Making the fee table editable
+
+The hard part of handover. Options, in order of durability:
+
+1. **Locked pattern of core blocks** (`templateLock`) using the native table block —
+   least elegant, most durable, no custom code to rot.
+2. **Custom Price Table block** in your own plugin — best editing experience for her,
+   but is itself a maintenance liability if it breaks in a future WP release.
+
+Same reasoning for the theme: if building one, make it a **block theme**
+(`theme.json` + patterns), not classic PHP. Keeps her in the native editor.
+
+**Verify free tiers before committing** — they shift, and Square's single-staff free
+offering in particular is the kind of thing that gets restructured.
+
 ## 12. Hosting
 
-Deployable to GitHub Pages via `.github/workflows/pages.yml`. Pages are emitted as
+**Live at https://davidwbritt.github.io/poochparlor/** — repo `davidwbritt/poochparlor`,
+branch `develop`, which auto-deploys on push via `.github/workflows/pages.yml`. Pages are emitted as
 directory indexes (`services/index.html`) so extensionless URLs work on any static host,
 and `--base` handles a project site served from `/RepoName/`.
 
@@ -225,4 +322,7 @@ should go on.
   Recognisable, but a designer would redraw the head as a single path.
 - Google Fonts is loaded from a CDN. Self-host if she wants to avoid the third-party
   request.
-- Hours are taken from the Wix site and have not been confirmed as current.
+- Hours came from the Wix site but are corroborated by her Google Business Profile
+  ("Closed · Opens 10 AM"). Treat as probably right, still worth a verbal check.
+- The reviews page shows "4.7 from 14" as hard-coded text. It will go stale and has to
+  be updated by hand, unless a live-pull plugin is added later.

@@ -4,8 +4,14 @@ A static, clickable prototype of a new site for **The Pooch Parlor Mobile Pet Sp
 a mobile dog groomer working out of Wake Forest, NC. Built to be shown to the owner
 before any commitment, then ported to WordPress and handed over.
 
-This is **not live** and is not affiliated with the business yet. Every price, review
-and photograph in it is a marked placeholder.
+**Live at https://davidwbritt.github.io/poochparlor/** — carrying `noindex` and a
+disallow-all `robots.txt` while it remains a demo.
+
+Not affiliated with the business yet; nothing has been agreed with the owner. Reviews
+are real, quoted from her Google Business Profile. **Prices and photographs are still
+placeholders** and are badged as such on the page.
+
+Start with `docs/brand-brief.md` §0 for current status and open decisions.
 
 ## Running it
 
