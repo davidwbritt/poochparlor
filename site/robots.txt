@@ -1,0 +1,4 @@
+# Demonstration site for a business that has not adopted it. Keeping it out of
+# search stops it competing with the owner's real site. Delete when it goes live.
+User-agent: *
+Disallow: /

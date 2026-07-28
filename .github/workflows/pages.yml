@@ -1,0 +1,66 @@
+name: Deploy prototype to GitHub Pages
+
+# Publishes ./site to GitHub Pages. The prototype carries a noindex meta tag and a
+# disallow-all robots.txt on purpose — it presents as a real business that has not
+# adopted it, so it must not be indexed or compete with the owner's live site.
+
+on:
+  push:
+    branches: [develop, main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Work out the base path
+        id: base
+        run: |
+          # A user/org site (owner.github.io) serves from the domain root.
+          # Any other repo is a project site served from /RepoName/.
+          repo='${{ github.event.repository.name }}'
+          owner='${{ github.repository_owner }}'
+          # Pages hostnames are lowercase but repo names keep their case, so fold both.
+          lc() { printf '%s' "$1" | tr '[:upper:]' '[:lower:]'; }
+          if [ "$(lc "$repo")" = "$(lc "$owner").github.io" ]; then
+            echo "value=" >> "$GITHUB_OUTPUT"
+            echo "User site — serving from root, no base path."
+          else
+            echo "value=/$repo" >> "$GITHUB_OUTPUT"
+            echo "Project site — base path /$repo"
+          fi
+
+      - name: Build
+        run: python3 ./scripts/build.py --base "${{ steps.base.outputs.value }}"
+
+      - name: Fail if the build produced no pages
+        run: test -f site/index.html && test -f site/services/index.html
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
