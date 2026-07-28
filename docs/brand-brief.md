@@ -92,7 +92,30 @@ Since the business is one person, **"I" would arguably be warmer and more honest
 "we"** — worth revisiting with her. It is a single pass through `scripts/build.py` to
 change.
 
-## 7. Design motif
+## 7. What her reviews actually say
+
+Worth reading before writing any more copy. Three things came out of the fourteen:
+
+**Her differentiator is not convenience — it is patience with difficult dogs.** Google's
+own extracted topic is "nervous dogs". Reba's review is entirely about an anxious cocker;
+Michele's says she *"takes her time when dogs are nervous"* and that she **found lumps
+during a groom and sent the owner to a vet**. Every mobile groomer sells convenience.
+Almost none can evidence that.
+
+**Dogs are pleased to see her.** Karen's corgi "runs to greet her"; Barbara's two "love
+her". That is unusually specific praise for a groomer and hard to fake.
+
+**Her one negative review is about communication.** Christopher Smith: *"Cant say much.
+Never got back to me."* One complaint in fourteen, and it is a response-time complaint —
+which is exactly what the request form plus a reliable notification to her phone exists
+to fix. This is the strongest practical argument for wiring up SMS notification rather
+than relying on email alone.
+
+The site currently leads on convenience. Leading on careful handling of nervous, elderly
+and difficult dogs would match what her customers actually value, and is a stronger
+position because far fewer competitors can claim it.
+
+## 8. Design motif
 
 One decorative device only: the **scalloped edge**, which is her pom shape abstracted
 into a section divider (`.edge-scallop`, pure CSS mask). It appears between sections
@@ -104,7 +127,7 @@ template, and cutting them is most of what separates this from her current site.
 
 ---
 
-## 8. What is still needed from her
+## 9. What is still needed from her
 
 Nothing below was guessed at. Anything uncertain is flagged in the page itself with a
 `Sample content` or `Needs answering` badge, so nothing incorrect can go out under her
@@ -116,15 +139,15 @@ name by accident.
       Triangle-area numbers, nothing more.
 - [ ] **Real photographs.** Before/after pairs matter most — same angle, same spot,
       good light. Also worth having: the van exterior, the tub, her at work.
-- [ ] **Real reviews.** Pull from her Google Business Profile and Facebook, with names
-      as the reviewer left them. The current quotes are written examples and are
-      labelled as such.
+- [x] **Real reviews — done.** Nine quotes taken from her Google Business Profile
+      (4.7 from 14 reviews), with names as the reviewer left them. Longer ones are
+      shortened with an ellipsis; no wording was changed. Rating and count are shown
+      on the reviews page and will need updating by hand as they change.
 - [ ] **Confirm the service area.** The town and ZIP list is an educated guess based on
       Wake Forest. Her actual route, and any travel charge beyond a set distance, must
       replace it. ZIPs live in one place: `data-zips` on the ZIP-check form.
-- [ ] **Does she have a Google Business Profile?** If not, this is the highest-value
-      hour she could spend on marketing — higher than the website. The reviews page has
-      a dead link waiting for it.
+- [x] **Google Business Profile — exists**, 4.7 from 14 reviews. Still worth pushing
+      review count up: 4.7 across 40 outranks 4.7 across 14 in local search.
 
 ### Factual questions left open in the FAQ
 
@@ -139,7 +162,7 @@ name by accident.
 
 ---
 
-## 9. Booking
+## 10. Booking
 
 Built as a **request form, not a live booking calendar** — a mobile groomer's route and
 drive times make hard self-service booking actively harmful, and it avoids a monthly fee.
@@ -158,7 +181,7 @@ success message that says explicitly that nothing was sent. To make it real:
 - Static hosting → point it at Formspree and delete the marked block in `main.js`
 - WordPress → Fluent Forms or WPForms, and delete the handler entirely
 
-## 10. WordPress plan
+## 11. WordPress plan
 
 **Recommendation: a mainstream block theme plus block patterns, not a custom theme.**
 
@@ -183,7 +206,7 @@ Mapping:
 Also worth setting up at handover: Google Business Profile, `LocalBusiness` schema
 (not yet added), a real domain, and analytics if she wants it.
 
-## 11. Hosting
+## 12. Hosting
 
 Deployable to GitHub Pages via `.github/workflows/pages.yml`. Pages are emitted as
 directory indexes (`services/index.html`) so extensionless URLs work on any static host,
@@ -195,7 +218,7 @@ indexed, and it must not appear in front of her customers ahead of her real site
 come off only at genuine launch — at which point the `LocalBusiness` schema in §12
 should go on.
 
-## 12. Known gaps in the prototype
+## 13. Known gaps in the prototype
 
 - No `LocalBusiness` structured data yet — worth adding before launch for local search.
 - The poodle's muzzle merges slightly into the head at the current outline weight.

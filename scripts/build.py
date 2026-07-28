@@ -31,7 +31,7 @@ BIZ = {
     "years": "nearly 20 years",
 }
 
-ZIPS = "27587,27571,27596,27525,27549,27522,27508,27614,27616"
+ZIPS = ("27587,27571,27596,27525,27549,27522,27508,27614,27616,27613,27604,27609,27545,27591,27597,27511,27513,27518,27519,27560,27612,27615")
 
 # Short labels — the full page titles live in PAGES. Long nav labels wrapped
 # and made the header ragged at desktop widths.
@@ -345,30 +345,14 @@ def home():
   <div class="wrap">
     <div class="section-head">
       <p class="eyebrow">Reviews</p>
-      <h2>What our clients say {SAMPLE}</h2>
-      <p class="lede">The quotes below are written examples showing how real reviews
-        will sit on the page. They are not from actual customers.</p>
+      <h2>What our clients say</h2>
+      <p class="lede">Fourteen reviews on Google, averaging 4.7. The words that come up
+        most often are about patience with nervous dogs.</p>
     </div>
-    <div class="grid grid--3">
-      <figure class="quote">
-        {stars()}
-        <blockquote>“Example review text goes here — this is placeholder copy standing in
-          for a real quote once real ones are collected from Google or Facebook.”</blockquote>
-        <figcaption><b>Sample name</b>Wake Forest</figcaption>
-      </figure>
-      <figure class="quote">
-        {stars()}
-        <blockquote>“A second example, a little shorter, to show how quotes of differing
-          length sit side by side without breaking the row.”</blockquote>
-        <figcaption><b>Sample name</b>Rolesville</figcaption>
-      </figure>
-      <figure class="quote">
-        {stars()}
-        <blockquote>“A third example, longer than the others, demonstrating that a
-          generous review still fits the card without crowding its neighbours or
-          pushing the layout around.”</blockquote>
-        <figcaption><b>Sample name</b>Youngsville</figcaption>
-      </figure>
+    <div class="grid grid--reviews">
+      {quote_card(*REVIEWS[0])}
+      {quote_card(*REVIEWS[1])}
+      {quote_card(*REVIEWS[2])}
     </div>
     <div class="btn-row" style="margin-top:2rem">
       <a class="btn btn--ghost" href="/reviews">Read more reviews</a>
@@ -562,36 +546,92 @@ def gallery():
 {cta_band()}"""
 
 
-def reviews():
-    def q(text, name, town, n=5):
-        return f"""<figure class="quote">{stars(n)}
-        <blockquote>“{text}”</blockquote>
-        <figcaption><b>{name}</b>{town}</figcaption></figure>"""
+# Real reviews from her Google Business Profile (4.7 from 14 reviews). Quoted as
+# written; where a review is shortened the cut is marked with an ellipsis and no
+# wording is changed. Punctuation and capitalisation lightly normalised only where
+# the original made a sentence hard to read.
+GOOGLE_RATING = "4.7"
+GOOGLE_COUNT = "14"
+GOOGLE_URL = "https://www.google.com/maps/search/The+Pooch+Parlor+Mobile+Pet+Salon+Wake+Forest+NC"
 
-    samples = [
-        ("Example review copy sits here. Once her Google and Facebook reviews are collected, real quotes replace this text one for one.", "Sample name", "Wake Forest"),
-        ("A shorter example, to show how a brief review looks beside a longer one.", "Sample name", "Rolesville"),
-        ("A longer example that runs to several lines, demonstrating that a generous review still sits comfortably in its card without crowding the ones next to it or unbalancing the row.", "Sample name", "Youngsville"),
-        ("Another example of placeholder review text, standing in until the real thing is available.", "Sample name", "Franklinton"),
-        ("Example copy about a nervous dog and a patient groomer — the kind of review that persuades people, once a real one is in hand.", "Sample name", "North Raleigh"),
-        ("A final example, kept short.", "Sample name", "Creedmoor"),
-    ]
+REVIEWS = [
+    ("She is amazing! She is definitely very knowledgeable about animals and she is so "
+     "sweet. She definitely cares for and loves and treats your animals as if they were "
+     "her own. The work she does is amazing! Hands down the best around!… And the best "
+     "part she comes to you and she takes her time! Your pup even watches cartoons!",
+     "Brandon Hawks", "Google review"),
+
+    ("Sheryl is excellent! I've been having my poodle groomed by Sheryl for many years… "
+     "She takes her time when dogs are nervous, she even has discovered lumps during "
+     "grooming and alerted me to have a vet check it. There is no one else I would trust "
+     "with my dog. I know my dog is safe, happy and always looks beautiful when she is done.",
+     "Michele Anne Agrest", "Google review"),
+
+    ("Our dog, Daisy Mae, is very anxious around strangers… From the first moment that "
+     "Daisy met Sheryl, she has loved her! Sheryl got right down and talked with her and "
+     "took time to make Daisy comfortable. Now, Daisy is so excited each time she sees "
+     "Sheryl… Sheryl takes the time required to suit each dog's personality and grooming "
+     "needs. She obviously cares about the dogs she grooms.",
+     "Reba McPherson", "Google review"),
+
+    ("The Pooch Parlor comes every two months. I have a big dog and a little dog. "
+     "Sheryl spoils them. They love her.",
+     "Barbara Ellisor", "Google review"),
+
+    ("Sheryl has been grooming our corgi for several years. Now that she has a mobile "
+     "service, when she comes to our door our dog runs to greet her. Sheryl is positive, "
+     "friendly and provides excellent service for a fair price.",
+     "Karen Mills", "Google review"),
+
+    ("Highly recommend The Pooch Parlor! Our little girl Willow got first class spa "
+     "treatment and loving attention. The owner comes to your home and makes everything "
+     "convenient. Very friendly, dedicated to your pet and professional.",
+     "A Google Local Guide", "Google review"),
+
+    ("I just rescued a pup a few nights ago. She needed to be groomed so bad. They got "
+     "her in right away. Excellent service!",
+     "Kaitlin Johnson", "Google review"),
+
+    ("Sheryl is amazing, goes above and beyond. I only needed her nails trimmed and she "
+     "went above that, cut and filed them and gave her this really cute bandanna to "
+     "wear… if you want someone who truly cares about your dog, go to Sheryl.",
+     "Amanda Freeman", "Google review"),
+
+    ("She is in my opinion the best around. I will not let anyone else cut my dog.",
+     "Brandon H.", "Google review"),
+]
+
+
+def quote_card(text, name, source, n=5):
+    short = " quote--short" if len(text) < 150 else ""
+    return f"""<figure class="quote{short}">{stars(n)}
+        <blockquote>“{text}”</blockquote>
+        <figcaption><b>{name}</b>{source}</figcaption></figure>"""
+
+
+def rating_summary():
+    return f"""<div class="rating">
+    {stars()}
+    <p><b>{GOOGLE_RATING}</b> from {GOOGLE_COUNT} Google reviews</p>
+    <a href="{GOOGLE_URL}">Read them on Google</a>
+  </div>"""
+
+
+def reviews():
     return f"""{page_head("Reviews",
-        "What clients say about grooming with The Pooch Parlor Mobile Pet Spa.",
+        "What clients say about grooming with The Pooch Parlor Mobile Pet Spa in Wake Forest, NC.",
         "Reviews")}
 
 <section class="section section--tight">
-  <div class="wrap">
-    <div class="notice" style="max-width:52rem"><strong>These reviews are written examples, not real customers.</strong>
-      They are placeholders showing how genuine reviews will look. Real quotes should be
-      pulled from her Google Business Profile and Facebook page, with names as the
-      reviewer left them.</div>
-  </div>
+  <div class="wrap">{rating_summary()}</div>
 </section>
 
 <section class="section" style="padding-top:0">
   <div class="wrap">
-    <div class="grid grid--3">{"".join(q(*s) for s in samples)}</div>
+    <div class="grid grid--reviews">{"".join(quote_card(*r) for r in REVIEWS)}</div>
+    <p class="card__note" style="margin-top:2rem;max-width:52rem">Reviews are quoted from
+      her Google Business Profile. Longer ones have been shortened where marked with an
+      ellipsis; no wording has been changed.</p>
   </div>
 </section>
 
@@ -602,7 +642,7 @@ def reviews():
       happy client can do for a small business. It takes two minutes.</p>
     <div class="btn-row" style="justify-content:center;margin-top:1.75rem">
       <a class="btn btn--primary" href="https://www.facebook.com/ThePoochParlorMobilePetSalon/">Review on Facebook</a>
-      <a class="btn btn--ghost" href="#">Review on Google <span class="is-sample">Link needed</span></a>
+      <a class="btn btn--ghost" href="{GOOGLE_URL}">Review on Google</a>
     </div>
   </div>
 </section>
@@ -611,10 +651,15 @@ def reviews():
 
 
 def service_area():
-    towns = [
+    core = [
         ("Wake Forest", "27587"), ("Rolesville", "27571"), ("Youngsville", "27596"),
         ("Franklinton", "27525"), ("Louisburg", "27549"), ("Creedmoor", "27522"),
-        ("Bunn", "27508"), ("North Raleigh", "27614"), ("Falls River / Wakefield", "27616"),
+        ("Bunn", "27508"), ("North Raleigh", "27614"), ("Wakefield", "27616"),
+    ]
+    wider = [
+        ("Raleigh", "27604 · 27609 · 27612"), ("Cary", "27511 · 27513 · 27518"),
+        ("Morrisville", "27560"), ("Knightdale", "27545"),
+        ("Wendell", "27591"), ("Zebulon", "27597"),
     ]
     return f"""{page_head("Service Area",
         "The Pooch Parlor Mobile Pet Spa covers Wake Forest and the surrounding towns in north Wake and Franklin counties.",
@@ -625,11 +670,12 @@ def service_area():
     <div>
       <p class="eyebrow">Covered towns</p>
       <h2>Wake Forest and out from there</h2>
-      <p>Our van works a regular route around Wake Forest, reaching into north Wake and
-        southern Franklin county. Because we travel to you, the day of the week often
-        decides how far out we can get.</p>
-      <p><strong>Just outside the list? Ask anyway.</strong> A short hop beyond the usual
-        route is frequently workable, particularly if you can be flexible on the day.</p>
+      <p>Our van works a regular route around Wake Forest, Youngsville and the towns
+        either side of it — but we get around. Most weeks we are down in Cary a couple of
+        days, and we cover a good deal of the Triangle in between.</p>
+      <p><strong>Not on the list? Ask anyway.</strong> Which day of the week it is often
+        matters more than the distance, so if you can be flexible on timing we can usually
+        reach you.</p>
       <form class="field" data-zip-check data-zips="{ZIPS}" style="margin-top:1.75rem;max-width:22rem">
         <label for="zip-area">Check your ZIP code</label>
         <div style="display:flex;gap:.6rem">
@@ -641,10 +687,13 @@ def service_area():
       </form>
     </div>
     <div>
-      <ul class="towns">{"".join(f"<li>{t} <em>{z}</em></li>" for t, z in towns)}</ul>
-      <div class="notice" style="margin-top:1.5rem"><strong>Needs confirming.</strong>
-        This town and ZIP list is an educated guess based on Wake Forest. Her real route,
-        and any travel charge beyond a certain distance, should replace it.</div>
+      <h3 style="font-size:var(--t-1);margin-bottom:.75rem">The regular route</h3>
+      <ul class="towns">{"".join(f"<li>{t} <em>{z}</em></li>" for t, z in core)}</ul>
+      <h3 style="font-size:var(--t-1);margin:2rem 0 .75rem">Further afield, most weeks</h3>
+      <ul class="towns">{"".join(f"<li>{t} <em>{z}</em></li>" for t, z in wider)}</ul>
+      <div class="notice" style="margin-top:1.5rem"><strong>Still worth confirming.</strong>
+        The towns are right in outline but the ZIP list is filled in around them. Her exact
+        route, and any travel charge beyond a certain distance, should replace it.</div>
     </div>
   </div>
 </section>

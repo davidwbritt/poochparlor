@@ -446,6 +446,8 @@ strong { font-weight: 600; color: var(--ink); }
 .grid--2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); }
 .grid--3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 16.5rem), 1fr)); }
 .grid--4 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
+/* Reviews run long and unevenly; narrower than this and they become tall ribbons. */
+.grid--reviews { grid-template-columns: repeat(auto-fit, minmax(min(100%, 21rem), 1fr)); }
 
 .card {
   background: var(--paper);
@@ -601,10 +603,12 @@ table.prices tbody tr:hover { background: var(--blush); }
   margin: 0;
   font-family: var(--font-display);
   font-variation-settings: "SOFT" 40, "WONK" 0;
-  font-size: var(--t-1);
-  line-height: 1.45;
+  font-size: var(--t-0);
+  line-height: 1.55;
   color: var(--ink);
 }
+/* the short ones can afford to be larger */
+.quote--short blockquote { font-size: var(--t-1); line-height: 1.45; }
 .quote figcaption {
   font-size: var(--t--1);
   color: var(--ink-faint);
@@ -613,6 +617,28 @@ table.prices tbody tr:hover { background: var(--blush); }
 .quote figcaption b { display: block; color: var(--ink); font-weight: 600; }
 .stars { display: flex; gap: 2px; color: var(--pink); }
 .stars svg { width: 1rem; height: 1rem; }
+
+/* Google rating summary */
+.rating {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2) var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--blush);
+  border-radius: var(--radius-lg);
+  max-width: 34rem;
+}
+.rating p { margin: 0; font-size: var(--t--1); color: var(--ink-soft); }
+.rating b {
+  font-family: var(--font-display);
+  font-variation-settings: "SOFT" 40;
+  font-size: var(--t-2);
+  color: var(--ink);
+  margin-right: 0.15rem;
+}
+.rating a { margin-left: auto; font-size: var(--t--1); white-space: nowrap; }
+.rating .stars svg { width: 1.15rem; height: 1.15rem; }
 
 /* sample-content flag, so placeholder text can never be mistaken for real */
 .is-sample {
